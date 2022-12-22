@@ -44,6 +44,7 @@ public class BalanceServiceImpl implements BalanceService {
 		String url = FabrickApiUri.URL_BALANCE_ACCOUNT;
 
 		HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
+		BalanceModel balance = new BalanceModel();
 
 		//using json node for get balance value and available value
 		ResponseEntity<JsonNode> response = restTemplate.exchange(
@@ -57,7 +58,6 @@ public class BalanceServiceImpl implements BalanceService {
 		Double balanceValue = map.get(FabrickConstants.PAYLOAD_NODE).get(FabrickConstants.AVAILABLE_BALANCE_NODE).asDouble();
 	
 		//create BalanceModel for setting balance value and available value
-		BalanceModel balance = new BalanceModel();
 	    balance.setBalance(balanceValue);
 	    balance.setAvailableBalance(availableBalance);
 		LOGGER.info(" Balance Service, balance: {}", balance);

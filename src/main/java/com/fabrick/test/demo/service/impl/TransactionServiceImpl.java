@@ -60,7 +60,7 @@ public class TransactionServiceImpl implements TransactionService{
 	}
 
 	@Override
-	public void saveTransaction(TransanctionPayloadModel transactionPayload) {
+	public void saveTransaction(TransanctionPayloadModel transactionPayload, long accountId) {
 		
 		LOGGER.info("Balance Service - saveTransaction, transactionPayload: {}", transactionPayload.getPayload());
 
@@ -85,6 +85,7 @@ public class TransactionServiceImpl implements TransactionService{
 				transaction.setTypeEnumeration(singleTransactionModel.getType().getEnumeration());
 				transaction.setTypeValue(singleTransactionModel.getType().getValue());
 				transaction.setValueDate(singleTransactionModel.getValueDate());
+				transaction.setAccountId(String.valueOf(accountId));
 				transactionRepository.save(transaction);
 				LOGGER.info("transaction with operationId {}, saved into db", transaction.getOperationId());
 			}

@@ -35,7 +35,7 @@ private static final Logger LOGGER = LoggerFactory.getLogger(AccountTransactionC
 		
 		//save transaction into DB
 		if(listTransactions!=null) {
-			transactionService.saveTransaction(listTransactions);
+			transactionService.saveTransaction(listTransactions, accountId);
 		}
 		
 		LOGGER.info("AccountTransactionController response {}", listTransactions);

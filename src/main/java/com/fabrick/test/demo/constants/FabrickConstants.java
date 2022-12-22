@@ -10,6 +10,8 @@ public class FabrickConstants {
 	public static final String AVAILABLE_BALANCE_NODE = "availableBalance";
 	public static final String BALANCE_NODE = "balance";
 	public static final String LIST_TRANSACTIONS_NODE = "list";
+	
+	public static final String ERROR_API_BALANCE_NOT_FOUND = "Invalid account identifier";
 
 
 

@@ -39,6 +39,9 @@ public class Transaction {
 	
 	@Column(name="type_value", nullable = false)
 	private String typeValue;
+	
+	@Column(name="account_id", nullable = false)
+	private String accountId;
 
 	public Long getId() {
 		return id;
@@ -120,11 +123,21 @@ public class Transaction {
 		this.typeValue = typeValue;
 	}
 
+	public String getAccountId() {
+		return accountId;
+	}
+
+	public void setAccountId(String accountId) {
+		this.accountId = accountId;
+	}
+
 	@Override
 	public String toString() {
 		return "Transaction [id=" + id + ", transactionId=" + transactionId + ", operationId=" + operationId
 				+ ", accountingDate=" + accountingDate + ", valueDate=" + valueDate + ", amount=" + amount
 				+ ", currency=" + currency + ", description=" + description + ", typeEnumeration=" + typeEnumeration
-				+ ", typeValue=" + typeValue + "]";
+				+ ", typeValue=" + typeValue + ", accountId=" + accountId + "]";
 	}
+
+	
 }
