@@ -19,18 +19,18 @@ import com.fabrick.test.demo.service.BalanceService;
 public class AccountBalanceController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AccountBalanceController.class);
-	
+
 	//call it dependency injection :D
 	@Autowired
 	private BalanceService balanceService;
-	
+
 
 	@GetMapping("{accountId}")
 	public ResponseEntity<?> getBalanceByAccountId(@PathVariable("accountId") long accountId) {
 		LOGGER.info("Balance: Balance API Controller with accountId {}", accountId);
-			BalanceModel balance = balanceService.getBalanceByAccount(accountId);	
-			LOGGER.info("Balance: Balance API Controller with balance response {}", balance);
-			return new ResponseEntity<BalanceModel>(balance, HttpStatus.OK);
+		BalanceModel balance = balanceService.getBalanceByAccount(accountId);	
+		LOGGER.info("Balance: Balance API Controller with balance response {}", balance);
+		return new ResponseEntity<BalanceModel>(balance, HttpStatus.OK);
 	}
 
 
