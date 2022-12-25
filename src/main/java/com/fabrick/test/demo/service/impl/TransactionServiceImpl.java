@@ -38,7 +38,7 @@ public class TransactionServiceImpl implements TransactionService{
 	
 	@Override
 	public TransanctionPayloadModel getAllTransactionsByAccountId(long accountId, String fromAccountingDate, String toAccountingDate) {
-		LOGGER.info("Balance: Balance Service with accountId {}", accountId);
+		LOGGER.info("TransactionService with accountId {}", accountId);
 		
 		// create headers
 		HttpHeaders headers = HttpHeadersUtil.getHeaders();
@@ -50,7 +50,7 @@ public class TransactionServiceImpl implements TransactionService{
 		ResponseEntity<TransanctionPayloadModel> response = restTemplate.exchange(
 				url, HttpMethod.GET, requestEntity, TransanctionPayloadModel.class, accountId, fromAccountingDate, toAccountingDate);
 
-		LOGGER.info("Balance Service, response: {}", response);
+		LOGGER.info("TransactionService response: {}", response);
 	
 		TransanctionPayloadModel result = response.getBody();
 		return result;
@@ -62,7 +62,7 @@ public class TransactionServiceImpl implements TransactionService{
 	@Override
 	public void saveTransaction(TransanctionPayloadModel transactionPayload, long accountId) {
 		
-		LOGGER.info("Balance Service - saveTransaction, transactionPayload: {}", transactionPayload.getPayload());
+		LOGGER.info("TransactionService, transactionPayload: {}", transactionPayload.getPayload());
 
 		List<SingleTransactionModel> listTransactions = transactionPayload.getPayload().getTransactions();
 		

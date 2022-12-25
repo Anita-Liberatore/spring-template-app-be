@@ -30,6 +30,7 @@ public class CreatePaymentServiceImpl implements CreatePaymentService{
 
 	@Override
 	public void createPayment(long accountId, CreatePaymentModel createPaymentModel) {
+		LOGGER.info("createPayment service START {}",createPaymentModel );
 
 		// create headers
 		HttpHeaders headers = HttpHeadersUtil.getHeaders();
@@ -64,11 +65,12 @@ public class CreatePaymentServiceImpl implements CreatePaymentService{
 		paymentJsonObject.put("feeAccountId", "45685475");
 		paymentJsonObject.put("taxRelief", taxReliefJsonObject);
 
-		
+		LOGGER.info("request {}", paymentJsonObject.toString());
+
 		HttpEntity<String> response = 
 				new HttpEntity<String>(paymentJsonObject.toString(), headers);
 
-		LOGGER.info("request {}", paymentJsonObject.toString());
+		LOGGER.info("response for Create Payment Service {}", response);
 
 		restTemplate.postForObject(url, response, String.class, accountId);
 		
