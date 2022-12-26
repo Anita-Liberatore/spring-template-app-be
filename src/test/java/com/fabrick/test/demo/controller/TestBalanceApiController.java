@@ -41,8 +41,6 @@ class TestBalanceApiController {
 		restTemplate = builder.build();
 	}
 	
-	@Autowired
-	AccountBalanceController balanceController;
 
 	@Test
 	public void testBalanceApi() throws Exception {
@@ -83,7 +81,7 @@ class TestBalanceApiController {
 
 	}
 
-	//with wrong accountid - expeted 500
+	//with wrong accountid - expected 500
 	@Test
 	public void returnErrorBalanceFromApi() throws Exception {
 		this.mockMvc.perform(get("/v1/api/account/balance/145377805")).andDo(print()).andExpect(status().is5xxServerError());

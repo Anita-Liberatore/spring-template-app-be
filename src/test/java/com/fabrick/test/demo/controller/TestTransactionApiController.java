@@ -10,30 +10,63 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.client.RestTemplate;
+
+import com.fabrick.test.demo.constants.FabrickApiUri;
+import com.fabrick.test.demo.model.TransanctionPayloadModel;
+import com.fabrick.test.demo.util.HttpHeadersUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 class TestTransactionApiController {
 
-
-
 	@Autowired
 	private MockMvc mockMvc;
+	
+	@Autowired
+	ObjectMapper mapper;
 
-	//all good test
+	RestTemplate restTemplate;
+
+	@Autowired
+	TestTransactionApiController(RestTemplateBuilder builder) {
+		restTemplate = builder.build();
+	}
+
 	@Test
 	public void returnTransactionsJsonFromApi() throws Exception {
-		this.mockMvc.perform(get("/v1/api/account/transaction/14537780?fromAccountingDate=2019-04-01&toAccountingDate=2019-09-01")).andDo(print()).andExpect(status().isOk())
-				.andExpect(content().string(containsString("{\"payload\":{\"list\":[{\"transactionId\":\"428524\",\"operationId\":\"00000000428524\",\"accountingDate\":\"2019-06-28\",\"valueDate\":\"2019-07-01\",\"type\":{\"enumeration\":\"GBS_TRANSACTION_TYPE\",\"value\":\"GBS_ACCOUNT_TRANSACTION_TYPE_0050\"},\"amount\":-38.9,\"currency\":\"EUR\",\"description\":\"PD VISA CORPORATE 05\"},{\"transactionId\":\"1390057989001\",\"operationId\":\"19000095363538\",\"accountingDate\":\"2019-06-14\",\"valueDate\":\"2019-06-14\",\"type\":{\"enumeration\":\"GBS_TRANSACTION_TYPE\",\"value\":\"GBS_ACCOUNT_TRANSACTION_TYPE_0010\"},\"amount\":90.0,\"currency\":\"EUR\",\"description\":\"BD LUCA TERRIBILE        DA 03268.44430         DATA ORDINE 14062019 RIMBORSO VISA\"},{\"transactionId\":\"314569\",\"operationId\":\"00000000314569\",\"accountingDate\":\"2019-05-31\",\"valueDate\":\"2019-06-01\",\"type\":{\"enumeration\":\"GBS_TRANSACTION_TYPE\",\"value\":\"GBS_ACCOUNT_TRANSACTION_TYPE_0050\"},\"amount\":-28.4,\"currency\":\"EUR\",\"description\":\"PD VISA CORPORATE 04\"},{\"transactionId\":\"038917\",\"operationId\":\"00000000038917\",\"accountingDate\":\"2019-04-30\",\"valueDate\":\"2019-05-01\",\"type\":{\"enumeration\":\"GBS_TRANSACTION_TYPE\",\"value\":\"GBS_ACCOUNT_TRANSACTION_TYPE_0050\"},\"amount\":-62.4,\"currency\":\"EUR\",\"description\":\"PD VISA CORPORATE 03\"}]}}")));
-	
+
+		// create headers
+		HttpHeaders headers = HttpHeadersUtil.getHeaders();
+
+		String url = FabrickApiUri.URL_TRANSACTION_ACCOUNT;
+
+		HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
+
+		ResponseEntity<TransanctionPayloadModel> response = restTemplate.exchange(
+				url, HttpMethod.GET, requestEntity, TransanctionPayloadModel.class, "14537780", "2022-04-01", "2022-09-01");
+
+
+		TransanctionPayloadModel result = response.getBody();
+		String jsonResult = mapper.writeValueAsString(result);
+
+		this.mockMvc.perform(get("/v1/api/account/transaction/14537780?fromAccountingDate=2022-04-01&toAccountingDate=2022-09-01")).andDo(print()).andExpect(status().isOk())
+		.andExpect(content().string(containsString(jsonResult)));
+
 	}
-	
+
 	//with wrong accountid - expeted 500 for missing params
 	@Test
 	public void returnErrorBalanceFromApi() throws Exception {
 		this.mockMvc.perform(get("/v1/api/account/transaction/14537780?toAccountingDate=2019-09-01")).andDo(print()).andExpect(status().is5xxServerError());
-	
+
 	}
 
 }
